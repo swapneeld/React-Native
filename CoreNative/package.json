@@ -1,10 +1,11 @@
 {
-  "name": "greetings",
-  "version": "1.0.0",
+  "name": "greetingspoc",
+  "version": "2.0.0",
   "description": "Greetings library ",
   "main": "greeting.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "refreshVSToken": "vsts-npm-auth -config reactpoc.npmrc"
   },
   "author": "",
   "license": "ISC",
