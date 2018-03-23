@@ -31,6 +31,7 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-native": "0.52.0",
+    "react-native-code-push": "^5.2.2",
     "react-native-web": "^0.5.1"
   }
 }
