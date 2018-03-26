@@ -23,7 +23,7 @@ export default class App extends Component<Props> {
           ESXP Shell
         </Text>
         <Text style={styles.instructions}>
-          This is the shell application, your upload will be added here. HMR is also possible by following the below instructions.
+          This is the shell application, your upload will be added here. HMR is also possible by following the below instructions. Lets see if it reloads.
         </Text>
         <Text style={styles.instructions}>
           {instructions}
