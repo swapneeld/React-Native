@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
+import Analytics from 'appcenter-analytics';
 
 import {
   Platform,
   StyleSheet,
   Text,
-  View
+  View,
+  Button,
+  TouchableOpacity
 } from 'react-native';
 
 const instructions = Platform.select({
@@ -16,6 +19,33 @@ const instructions = Platform.select({
 
 type Props = {};
 export default class App extends Component<Props> {
+
+    constructor(props) {
+      super(props);
+      
+      this.state = {
+        counter: 0
+      }
+      Analytics.isEnabled()
+        .then(async (isAnalyticsEnabled) => {
+          if (isAnalyticsEnabled == false)
+            await Analytics.setEnabled(true);
+        });
+
+        this.onCounterIncrease = this.onCounterIncrease.bind(this);
+    }
+
+    onCounterIncrease() {
+      Analytics.trackEvent("Counter Increased", 
+      {
+        "Category": "Button Press",
+      });
+
+      this.setState((previousState, props) => ({
+        counter: previousState.counter + 1
+      }));
+    }
+
   render() {
     return (
       <View style={styles.container}>
@@ -23,10 +53,17 @@ export default class App extends Component<Props> {
           ESXP Shell
         </Text>
         <Text style={styles.instructions}>
-          This is the shell application, your upload will be added here. HMR is also possible by following the below instructions. Lets see if it reloads.
+          This is the shell application, your upload will be added here. HMR is also possible by following the below instructions.
         </Text>
         <Text style={styles.instructions}>
           {instructions}
+        </Text>
+        
+        <TouchableOpacity onPress={this.onCounterIncrease}>
+          <Text>Increase Counter</Text>
+        </TouchableOpacity>
+        <Text style={styles.container}>
+          Counter: {this.state.counter}
         </Text>
       </View>
     );
