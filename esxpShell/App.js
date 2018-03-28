@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Analytics from 'appcenter-analytics';
+import Crashes from 'appcenter-crashes';
 
 import {
   Platform,
@@ -17,22 +18,60 @@ const instructions = Platform.select({
     'Shake or press menu button for dev menu',
 });
 
+const crashRecoveryMessage = 'We appologize for the inconvinience. We are working on fixing the issue, please contact the support center for more information.';
+
 type Props = {};
 export default class App extends Component<Props> {
+    didApplicationCrash = false;
+    crashReport = '';
 
     constructor(props) {
       super(props);
       
       this.state = {
-        counter: 0
+        counter: 0,
+        didApplicationCrash: false
       }
       Analytics.isEnabled()
         .then(async (isAnalyticsEnabled) => {
           if (isAnalyticsEnabled == false)
             await Analytics.setEnabled(true);
         });
+        this.configureCrashSettings();
 
+        var that = this;
+        Crashes.hasCrashedInLastSession() 
+          .then(function (crashStatus) {
+            this.didApplicationCrash = crashStatus;
+            that.setState({
+              didApplicationCrash: crashStatus
+            });
+            if (crashStatus) {
+              Crashes.lastSessionCrashReport()
+              .then(function (report) {
+                this.crashReport = report;
+              })  
+            }
+          });
+        
         this.onCounterIncrease = this.onCounterIncrease.bind(this);
+        this.crashApplication = this.crashApplication.bind(this);
+    }
+
+    configureCrashSettings() {
+      Crashes.isEnabled()
+        .then(async (isCrashEnabled) => {
+          if (isCrashEnabled == false)
+            await Crashes.setEnabled(true);
+        })
+
+      Crashes.setListener({
+        onBeforeSending: function(report) {
+          Analytics.trackEvent("Application Crashed",{
+            "Report": JSON.stringify(report)
+          });
+        }
+      });
     }
 
     onCounterIncrease() {
@@ -44,6 +83,13 @@ export default class App extends Component<Props> {
       this.setState((previousState, props) => ({
         counter: previousState.counter + 1
       }));
+    }
+
+    //Only for testing
+    crashApplication(){
+      //Only for local testing
+      // Crashes.generateTestCrash();
+      throw new Error("Dummy crash test");
     }
 
   render() {
@@ -58,6 +104,14 @@ export default class App extends Component<Props> {
         <Text style={styles.instructions}>
           {instructions}
         </Text>
+
+        { 
+          this.state.didApplicationCrash && 
+          <Text>
+            {crashRecoveryMessage}
+          </Text>
+        }
+        
         
         <TouchableOpacity onPress={this.onCounterIncrease}>
           <Text>Increase Counter</Text>
@@ -65,6 +119,10 @@ export default class App extends Component<Props> {
         <Text style={styles.container}>
           Counter: {this.state.counter}
         </Text>
+
+        <TouchableOpacity onPress={this.crashApplication}>
+          <Text>Simulate a crash</Text>
+        </TouchableOpacity>
       </View>
     );
   }
