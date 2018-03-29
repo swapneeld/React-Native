@@ -21,13 +21,8 @@ const instructions = Platform.select({
 
 const crashRecoveryMessage = 'We appologize for the inconvinience. We are working on fixing the issue, please contact the support center for more information.';
 
-let codePushOptions = {
-  checkFrequency: codePush.CheckFrequency.ON_APP_START,
-  deploymentKey: '7S616K4KWRhJzzo8-HCrCDNTl8RzBkgriN8cz'
-};
-
 type Props = {};
-export default class App extends Component<Props> {
+export default class ESApp extends Component<Props> {
     didApplicationCrash = false;
     crashReport = '';
 
@@ -105,12 +100,9 @@ export default class App extends Component<Props> {
           ESXP Shell
         </Text>
         <Text style={styles.instructions}>
-          This is the shell application, your upload will be added here. HMR is also possible by following the below instructions. HMR.
+          This is the mobile application for Enterprise Services
         </Text>
-        <Text style={styles.instructions}>
-          {instructions}
-        </Text>
-
+        
         { 
           this.state.didApplicationCrash && 
           <Text>
@@ -153,4 +145,4 @@ const styles = StyleSheet.create({
   },
 });
 
-App = codePush(App);
+ESApp = codePush(ESApp);
