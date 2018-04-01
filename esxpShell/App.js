@@ -22,7 +22,7 @@ const instructions = Platform.select({
 const crashRecoveryMessage = 'We appologize for the inconvinience. We are working on fixing the issue, please contact the support center for more information.';
 
 let codePushOptions = {
-  checkFrequency: codePush.CheckFrequency.ON_APP_START,
+  checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
   deploymentKey: '7S616K4KWRhJzzo8-HCrCDNTl8RzBkgriN8cz'
 };
 
@@ -105,7 +105,7 @@ export default class App extends Component<Props> {
           ESXP Shell
         </Text>
         <Text style={styles.instructions}>
-          This is the shell application, your upload will be added here. HMR is also possible by following the below instructions. HMR.
+          This is the shell application, your upload will be added here. HMR is also possible by following the below instructions. The data is getting updated from Code Push. Update #2.
         </Text>
         <Text style={styles.instructions}>
           {instructions}
@@ -153,4 +153,4 @@ const styles = StyleSheet.create({
   },
 });
 
-App = codePush(App);
+App = codePush(codePushOptions)(App);
