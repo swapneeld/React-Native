@@ -27,7 +27,7 @@ let codePushOptions = {
 };
 
 type Props = {};
-export default class App extends Component<Props> {
+class App extends Component<Props> {
     didApplicationCrash = false;
     crashReport = '';
 
@@ -105,7 +105,7 @@ export default class App extends Component<Props> {
           ESXP Shell
         </Text>
         <Text style={styles.instructions}>
-          This is the shell application, your upload will be added here. HMR is also possible by following the below instructions. The data is getting updated from Code Push. Update #2.
+          This was a live demo
         </Text>
         <Text style={styles.instructions}>
           {instructions}
@@ -154,3 +154,4 @@ const styles = StyleSheet.create({
 });
 
 App = codePush(codePushOptions)(App);
+export default App;
